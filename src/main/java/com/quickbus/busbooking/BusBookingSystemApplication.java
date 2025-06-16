@@ -11,8 +11,6 @@ public class BusBookingSystemApplication {
 		SpringApplication.run(BusBookingSystemApplication.class, args);
 		System.out.println("Bus Booking API is running!");
 
-		User user = new User();
-		user.setId(12L);
 	}
 
 }
