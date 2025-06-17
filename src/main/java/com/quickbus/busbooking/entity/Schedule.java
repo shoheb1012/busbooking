@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
-@Entity(name = "schedule")
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,6 +19,11 @@ public class Schedule {
 
     private LocalDate travelDate;
 
+    private LocalTime departureTime;
+    private LocalTime arrivalTime;
+
+    private String journeyDuration;
+
     private int availableSeats;
 
     @ManyToOne
@@ -26,4 +32,3 @@ public class Schedule {
     @ManyToOne
     private Route route;
 }
-
