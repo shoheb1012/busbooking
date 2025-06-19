@@ -1,8 +1,10 @@
 package com.quickbus.busbooking.service;
 
+import com.quickbus.busbooking.dto.SearchRequest;
 import com.quickbus.busbooking.entity.Bus;
 import com.quickbus.busbooking.entity.Route;
 import com.quickbus.busbooking.entity.Schedule;
+import com.quickbus.busbooking.enums.SortType;
 import com.quickbus.busbooking.exception.BusNotFoundException;
 import com.quickbus.busbooking.exception.RouteNotFoundException;
 import com.quickbus.busbooking.repository.BusRepository;
@@ -15,6 +17,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -72,27 +75,41 @@ public class BusService {
         return scheduleRepo.save(schedule);
     }
 
-    public List<Schedule> searchBuses(String source, String destination, LocalDate date) {
-        List<Schedule> byRouteSourceAndRouteDestinationAndTravelDate = scheduleRepo.findByRouteSourceAndRouteDestinationAndTravelDate(source, destination, date);
-        if (byRouteSourceAndRouteDestinationAndTravelDate.size() == 0) {
-            throw new BusNotFoundException("No Bus found for the " + source + " to " + destination + " on " + date);
+
+    public List<Schedule> searchBuses(SearchRequest request) {
+        List<Schedule> schedules = scheduleRepo.findSchedulesBySourceToDestinationDate(request.getSource(), request.getDestination(), request.getTravelDate());
+
+        if (schedules.isEmpty()) {
+            throw new BusNotFoundException("oops Busses not Available for this route ");
         }
-        return byRouteSourceAndRouteDestinationAndTravelDate;
+        if (request.getBusType() != null) {
+            schedules = schedules.stream().filter(s -> s.getBus().getBusType().name().equalsIgnoreCase(request.getBusType().name())).toList();
+        }
+
+
+        if (SortType.FARE.equals(request.getSortBy())) {
+            schedules.sort(Comparator.comparingDouble(Schedule::getFare));
+        } else if (SortType.DEPARTURE_TIME.equals(request.getSortBy())) {
+            schedules.sort(Comparator.comparing(Schedule::getDepartureTime));
+        }
+
+
+        schedules = schedules.stream().filter(s -> s.getAvailableSeats() > 0).toList();
+
+        return schedules;
     }
 
-    public List<Bus> getAllBusses()
-    {
+    public List<Bus> getAllBusses() {
         return busRepo.findAll();
     }
-    public List<Route> getAllRoutes()
-    {
+
+    public List<Route> getAllRoutes() {
         return routeRepo.findAll();
     }
-    public List<Schedule> getAllBussesSchedule()
-    {
+
+    public List<Schedule> getAllBussesSchedule() {
         return scheduleRepo.findAll();
     }
-
 
 
 }

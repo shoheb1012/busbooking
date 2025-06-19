@@ -25,6 +25,8 @@ public class Schedule {
     private String journeyDuration;
 
     private int availableSeats;
+    private Double fare;
+
 
     @ManyToOne
     private Bus bus;

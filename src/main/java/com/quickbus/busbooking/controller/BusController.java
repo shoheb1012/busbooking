@@ -1,5 +1,6 @@
 package com.quickbus.busbooking.controller;
 
+import com.quickbus.busbooking.dto.SearchRequest;
 import com.quickbus.busbooking.entity.Bus;
 import com.quickbus.busbooking.entity.Route;
 import com.quickbus.busbooking.entity.Schedule;
@@ -32,9 +33,9 @@ public class BusController {
         return busService.addSchedule(schedule);
     }
 
-    @GetMapping("/search")
-    public List<Schedule> search(@RequestParam String source, @RequestParam String destination, @RequestParam String date) {  //format yyyy-mm-dd
-        return busService.searchBuses(source, destination, LocalDate.parse(date));
+    @PostMapping("/search")
+    public List<Schedule> search(@RequestBody SearchRequest searchRequest) {  //format yyyy-mm-dd
+        return busService.searchBuses(searchRequest);
     }
 
     @GetMapping("/getAllBus")

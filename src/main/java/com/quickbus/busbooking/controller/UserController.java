@@ -1,5 +1,7 @@
 package com.quickbus.busbooking.controller;
 
+import com.quickbus.busbooking.dto.AuthRequest;
+import com.quickbus.busbooking.dto.AuthResponse;
 import com.quickbus.busbooking.dto.LoginResponse;
 import com.quickbus.busbooking.entity.User;
 import com.quickbus.busbooking.service.UserService;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.AuthProvider;
 import java.util.Optional;
 
 @RestController
@@ -29,7 +32,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody User user) {
-        Optional<User> loggedIn = userService.login(user.getEmailId(), user.getPassword());
+        Optional<User> loggedIn = userService.loginUser(user.getEmailId(), user.getPassword());
 
         if (loggedIn.isPresent()) {
             return ResponseEntity.ok(new LoginResponse("Login successful!", loggedIn.get().getEmailId()));
@@ -38,4 +41,12 @@ public class UserController {
                     .body(new LoginResponse("Invalid credentials!", user.getEmailId()));
         }
     }
+
+    @PostMapping("/login_user")
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+        String token = userService.login(request);
+        return ResponseEntity.ok(new AuthResponse(token));
+    }
+
+
 }

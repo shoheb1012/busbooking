@@ -1,5 +1,6 @@
 package com.quickbus.busbooking.entity;
 
+import com.quickbus.busbooking.enums.Role;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,4 +22,6 @@ public class User {
     private String emailId;
     private Long phone;
     private String password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }
