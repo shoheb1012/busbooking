@@ -12,7 +12,7 @@ public class JwtUtil {
 
     private final String SECRET = "quickbus-secret-key"; // You can change the key
 
-    // Generate token with email & role
+
     public String generateToken(String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
@@ -23,7 +23,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Get data from token
+
     public Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET)
@@ -31,12 +31,12 @@ public class JwtUtil {
                 .getBody();
     }
 
-    // Get email
+
     public String extractEmail(String token) {
         return extractAllClaims(token).getSubject();
     }
 
-    // Check token is expired
+
     public boolean isTokenValid(String token) {
         return !extractAllClaims(token).getExpiration().before(new Date());
     }

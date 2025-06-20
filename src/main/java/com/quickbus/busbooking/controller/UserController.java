@@ -8,12 +8,11 @@ import com.quickbus.busbooking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.AuthProvider;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -30,16 +29,22 @@ public class UserController {
     }
 
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody User user) {
-        Optional<User> loggedIn = userService.loginUser(user.getEmailId(), user.getPassword());
+//    @PostMapping("/login")
+//    public ResponseEntity<LoginResponse> login(@RequestBody User user) {
+//        Optional<User> loggedIn = userService.loginUser(user.getEmailId(), user.getPassword());
+//
+//        if (loggedIn.isPresent()) {
+//            return ResponseEntity.ok(new LoginResponse("Login successful!", loggedIn.get().getEmailId()));
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .body(new LoginResponse("Invalid credentials!", user.getEmailId()));
+//        }
+//    }
 
-        if (loggedIn.isPresent()) {
-            return ResponseEntity.ok(new LoginResponse("Login successful!", loggedIn.get().getEmailId()));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new LoginResponse("Invalid credentials!", user.getEmailId()));
-        }
+    @GetMapping("/get_all_users")
+    @PreAuthorize("hasRole('USER')") // Optional, if you want role-based access
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @PostMapping("/login_user")

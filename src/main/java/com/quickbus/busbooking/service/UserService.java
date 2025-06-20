@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,19 +43,31 @@ public class UserService {
         return userRepository.save(user);
     }
     public String login(AuthRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
-        User user = userRepository.findByEmailId(request.getEmail()).orElseThrow(()-> new UserNotAvailable("User not found"));
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmailId(), request.getPassword())
+            );
+        } catch (Exception ex) {
+            throw new RuntimeException("Invalid email or password");  // Debug: log ex.getMessage() if needed
+        }
+
+        User user = userRepository.findByEmailId(request.getEmailId())
+                .orElseThrow(() -> new UserNotAvailable("User not found"));
+
         return jwtUtil.generateToken(user.getEmailId(), user.getRole().name());
     }
 
-    public Optional<User> loginUser(String emailId, String password) {
-        Optional<User> user = userRepository.findByEmailId(emailId);
-        if (user.isPresent() && user.get().getPassword().equals(password)) {
-            return user;
-        }
-        return Optional.empty();
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
+
+
+//    public Optional<User> loginUser(String emailId, String password) {
+//        Optional<User> user = userRepository.findByEmailId(emailId);
+//        if (user.isPresent() && user.get().getPassword().equals(password)) {
+//            return user;
+//        }
+//        return Optional.empty();
+//    }
 
 }

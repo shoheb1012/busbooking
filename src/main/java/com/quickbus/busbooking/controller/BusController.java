@@ -7,6 +7,7 @@ import com.quickbus.busbooking.entity.Schedule;
 import com.quickbus.busbooking.service.BusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -33,6 +34,7 @@ public class BusController {
         return busService.addSchedule(schedule);
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/search")
     public List<Schedule> search(@RequestBody SearchRequest searchRequest) {  //format yyyy-mm-dd
         return busService.searchBuses(searchRequest);
