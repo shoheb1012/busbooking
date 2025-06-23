@@ -19,22 +19,24 @@ public class BusController {
     @Autowired
     private BusService busService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add-route")
     public ResponseEntity<Route> addRoute(@RequestBody Route route) {
         return ResponseEntity.ok(busService.addRoute(route));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add-bus")
     public ResponseEntity<Bus> addBus(@RequestBody Bus bus) {
         return ResponseEntity.ok(busService.addBus(bus));
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add-schedule")
     public Schedule addSchedule(@RequestBody Schedule schedule) {
         return busService.addSchedule(schedule);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+
     @PostMapping("/search")
     public List<Schedule> search(@RequestBody SearchRequest searchRequest) {  //format yyyy-mm-dd
         return busService.searchBuses(searchRequest);

@@ -11,6 +11,7 @@ import com.quickbus.busbooking.exception.UserNotAvailable;
 import com.quickbus.busbooking.repository.BookingRepository;
 import com.quickbus.busbooking.repository.ScheduleRepository;
 import com.quickbus.busbooking.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +27,14 @@ public class BookingService {
     @Autowired
     ScheduleRepository scheduleRepository;
 
+    @Autowired
+    EmailService emailService;
+
+    @Transactional
     public Booking bookTicket(Long userId,Long scheduleId,int seats)
     {
         User user = userRepository.findById(userId).orElseThrow(()->new UserNotAvailable("User not found with Id :"+userId));
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(()->new ScheduleNotFoundException("Bus not found with Id "+scheduleId));
-
+        Schedule schedule = scheduleRepository.findScheduleById(scheduleId).orElseThrow(() -> new ScheduleNotFoundException("Bus not found with Id " + scheduleId));
         if (schedule.getAvailableSeats() < seats) {
             throw new SeatsNotAvailable("Not enough seats available.");
         }
@@ -50,7 +54,9 @@ public class BookingService {
                 .bookingTime(LocalDateTime.now())
                 .build();
 
-        return bookingRepository.save(booking);
+        Booking save = bookingRepository.save(booking);
+        emailService.sendBookingConfirmation(save);
+        return save;
     }
 
     public String cancelBooking(Long bookingId) {
@@ -67,8 +73,8 @@ public class BookingService {
         schedule.setAvailableSeats(schedule.getAvailableSeats() + booking.getSeatsBooked());
 
         scheduleRepository.save(schedule);
-        bookingRepository.save(booking);
-
+        Booking save = bookingRepository.save(booking);
+        emailService.sendCancellationMail(save);
         return "Booking cancelled successfully.";
     }
 

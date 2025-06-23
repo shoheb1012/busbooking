@@ -28,21 +28,8 @@ public class UserController {
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
-
-//    @PostMapping("/login")
-//    public ResponseEntity<LoginResponse> login(@RequestBody User user) {
-//        Optional<User> loggedIn = userService.loginUser(user.getEmailId(), user.getPassword());
-//
-//        if (loggedIn.isPresent()) {
-//            return ResponseEntity.ok(new LoginResponse("Login successful!", loggedIn.get().getEmailId()));
-//        } else {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                    .body(new LoginResponse("Invalid credentials!", user.getEmailId()));
-//        }
-//    }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get_all_users")
-    @PreAuthorize("hasRole('ADMIN')") // Optional, if you want role-based access
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
