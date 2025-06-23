@@ -12,7 +12,7 @@ public class JwtUtil {
 
     private final String SECRET = "quickbus-secret-key"; // You can change the key
 
-
+//
     public String generateToken(String email, String role) {
         return Jwts.builder()
                 .setSubject(email)

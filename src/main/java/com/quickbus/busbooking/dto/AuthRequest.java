@@ -1,7 +1,7 @@
 package com.quickbus.busbooking.dto;
 
 import lombok.Data;
-
+//
 @Data
 public class AuthRequest {
 
