@@ -42,7 +42,7 @@ public class UserController {
 //    }
 
     @GetMapping("/get_all_users")
-    @PreAuthorize("hasRole('USER')") // Optional, if you want role-based access
+    @PreAuthorize("hasRole('ADMIN')") // Optional, if you want role-based access
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }

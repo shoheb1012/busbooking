@@ -48,7 +48,7 @@ public class BusService {
         Route route = routeRepo.findById(routeId)
                 .orElseThrow(() -> new RouteNotFoundException("Route not found with id: " + routeId));
 
-        // Combine travelDate with time to get LocalDateTime
+
         LocalDate travelDate = schedule.getTravelDate();
         LocalTime departureTime = schedule.getDepartureTime();
         LocalTime arrivalTime = schedule.getArrivalTime();
