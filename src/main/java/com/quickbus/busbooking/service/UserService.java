@@ -42,6 +42,16 @@ public class UserService {
 
         return userRepository.save(user);
     }
+    public User registerAdmin(User user) {
+        Optional<User> user1 = userRepository.findByEmailId(user.getEmailId());
+        if (user1.isPresent()) {
+            throw new EmailAlreadyExistsException("Email already registered!");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.ADMIN);
+
+        return userRepository.save(user);
+    }
     public String login(AuthRequest request) {
         try {
             authenticationManager.authenticate(
