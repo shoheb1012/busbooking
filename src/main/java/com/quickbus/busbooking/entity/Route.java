@@ -17,5 +17,8 @@ public class Route {
     private String source;
 
     private String destination;
+
+    @Column(name = "distance_km")
+    private Integer distanceKm;
 }
 

@@ -51,5 +51,23 @@ public class EmailService {
         message.setText(text);
         mailSender.send(message);
     }
+
+    public void sendCancellationMail(Booking booking, int seatsCancelled, double refundAmount) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(booking.getUser().getEmailId());
+        message.setSubject("Booking Cancelled - QuickBus");
+
+        String text = "Hello " + booking.getUser().getName() + ",\n"
+                + "Your cancellation was successful.\n"
+                + "Booking ID: " + booking.getId() + "\n"
+                + "Cancelled Seats: " + seatsCancelled + "\n"
+                + "Remaining Seats: " + booking.getSeatsBooked() + "\n"
+                + "Refund Amount: ₹" + refundAmount + "\n"
+                + "Thank you for choosing QuickBus.";
+
+        message.setText(text);
+        mailSender.send(message);
+    }
+
 }
 

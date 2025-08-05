@@ -30,6 +30,7 @@ public class BusController {
     public ResponseEntity<Bus> addBus(@RequestBody Bus bus) {
         return ResponseEntity.ok(busService.addBus(bus));
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add-schedule")
     public Schedule addSchedule(@RequestBody Schedule schedule) {

@@ -71,13 +71,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public User getUserByEmail(String emailId) {
+        return userRepository.findByEmailId(emailId)
+                .orElse(null); // Return null if user not found
+    }
 
-//    public Optional<User> loginUser(String emailId, String password) {
-//        Optional<User> user = userRepository.findByEmailId(emailId);
-//        if (user.isPresent() && user.get().getPassword().equals(password)) {
-//            return user;
-//        }
-//        return Optional.empty();
-//    }
+
 
 }

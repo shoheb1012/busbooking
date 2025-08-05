@@ -63,6 +63,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/bus/add-bus").hasRole("ADMIN")
                 .requestMatchers("/api/bookings/**").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/api/users/get_all_users").hasRole("ADMIN")
+                .requestMatchers("/api/users/me").hasAnyRole("USER", "ADMIN") // NEW LINE - Allow both USER and ADMIN to access /me
                 .requestMatchers(
                         "/api/bus/add-route",
                         "/api/bus/add-bus",
@@ -72,7 +73,6 @@ public class SecurityConfig {
         );
 
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

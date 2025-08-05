@@ -1,6 +1,6 @@
 package com.quickbus.busbooking.entity;
 
-import com.quickbus.busbooking.enums.Status;
+import com.quickbus.busbooking.enums.Status ;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +22,8 @@ public class Booking {
 
     private int seatsBooked;
 
-    private double totalFare;
+    @Column(name = "totalFare")
+    public double totalFare;
 
     @Enumerated(EnumType.STRING)
     private Status status;

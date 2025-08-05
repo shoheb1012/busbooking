@@ -12,13 +12,13 @@ public class JwtUtil {
 
     private final String SECRET = "quickbus-secret-key"; // You can change the key
 
-//
+
     public String generateToken(String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))//10hr
                 .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();
     }
